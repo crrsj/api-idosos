@@ -1,0 +1,17 @@
+package br.com.idosos.enums;
+
+public enum Via {
+	ORAL,
+	INTRAVENOSA,
+	INTRAMUSCULAR,
+	SUBCURANEA,
+	SUBLINGUAL,
+	TÓPICA,
+	INALATORIA,
+	TRANSDERMICA,
+	OCULAR,
+	OTOLOGICA,
+	NASAL
+	
+
+}
