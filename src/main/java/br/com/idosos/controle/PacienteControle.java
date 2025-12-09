@@ -79,7 +79,9 @@ public class PacienteControle {
     @ApiResponse(responseCode = "204",description = " sucesso",content = {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
-	public void excluirPaciente(@PathVariable Long id) {
+	public ResponseEntity<Void> excluirPaciente(@PathVariable Long id) {
 		pacienteServico.excluirPaciente(id);
+		return ResponseEntity.noContent().build();
+
 	}
 }
