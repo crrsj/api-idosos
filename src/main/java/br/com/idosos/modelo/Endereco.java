@@ -1,7 +1,9 @@
 package br.com.idosos.modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,13 +24,13 @@ public class Endereco {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String rua;
-	private Integer numero;
+	private String numero;
 	private String bairro;
 	private String cidade;
 	private String estado;
 	@ManyToOne
 	@JoinColumn(name = "idPaciente")
-	@JsonIgnore
+	@JsonIgnoreProperties({"medicamento", "endereco"})
 	private Paciente paciente;
 	private String complemento;
 	

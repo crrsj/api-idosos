@@ -2,6 +2,9 @@ package br.com.idosos.infra;
 
 import java.util.NoSuchElementException;
 
+import br.com.idosos.excessoes.EnderecoNaoEncontrado;
+import br.com.idosos.excessoes.MedicamentoNaoEncontrado;
+import br.com.idosos.excessoes.PacienteNaoEncontrado;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,11 +17,25 @@ import br.com.idosos.dto.ValidandoCampos;
 @ControllerAdvice
 public class TratamentoDeErros {
 	
-	@ExceptionHandler(NoSuchElementException.class)
-	public ResponseEntity<MensagemDeErro> objetoNaoEncontrado(){
-		var erros = new MensagemDeErro(HttpStatus.NOT_FOUND, "Objeto não encontrado !");
+	@ExceptionHandler(PacienteNaoEncontrado.class)
+	public ResponseEntity<MensagemDeErro> pacienteNaoEncontrado(){
+		var erros = new MensagemDeErro(HttpStatus.NOT_FOUND, "Paciente não encontrado !");
 		return new ResponseEntity<>(erros,HttpStatus.NOT_FOUND);
 		
+	}
+
+	@ExceptionHandler(EnderecoNaoEncontrado.class)
+	public ResponseEntity<MensagemDeErro> enderecoNaoEncontrado(){
+		var erros = new MensagemDeErro(HttpStatus.NOT_FOUND, "Endereço não encontrado !");
+		return new ResponseEntity<>(erros,HttpStatus.NOT_FOUND);
+
+	}
+
+	@ExceptionHandler(MedicamentoNaoEncontrado.class)
+	public ResponseEntity<MensagemDeErro> medicamentoNaoEncontrado(){
+		var erros = new MensagemDeErro(HttpStatus.NOT_FOUND, "Medicamento não encontrado !");
+		return new ResponseEntity<>(erros,HttpStatus.NOT_FOUND);
+
 	}
 	
 	

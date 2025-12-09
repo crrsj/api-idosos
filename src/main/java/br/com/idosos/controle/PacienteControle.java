@@ -2,18 +2,13 @@ package br.com.idosos.controle;
 
 import java.util.List;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import br.com.idosos.dto.PacienteDTO;
 import br.com.idosos.modelo.Paciente;
 import br.com.idosos.servico.PacienteServico;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/paciente")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class PacienteControle {
 	
 	private final PacienteServico pacienteServico;
@@ -36,9 +32,8 @@ public class PacienteControle {
     @ApiResponse(responseCode = "201",description = " sucesso",content = {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
-	public ResponseEntity<Paciente>criarPaciente(@RequestBody @Valid PacienteDTO pacienteDTO){
-		var cadastrar = pacienteServico.cadastrarPaciente(pacienteDTO);
-		return new ResponseEntity<>(cadastrar,HttpStatus.CREATED);
+	public ResponseEntity<Paciente>criarPaciente(@RequestBody @Valid Paciente paciente){
+		return ResponseEntity.status(HttpStatus.CREATED).body(pacienteServico.cadastrarPaciente(paciente));
 	}
 
 	@GetMapping
@@ -46,9 +41,9 @@ public class PacienteControle {
     @ApiResponse(responseCode = "200",description = " sucesso",content = {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
-	public ResponseEntity<List<PacienteDTO>>listarPacientes(){
-		var listar = pacienteServico.listarPacientes();
-		return new ResponseEntity<>(listar,HttpStatus.OK);
+	public ResponseEntity<Page<Paciente>>listarPacientes(Pageable pageable){
+	   Page<Paciente>pacientes = pacienteServico.listarPacientes(pageable);
+		return ResponseEntity.status(HttpStatus.OK).body(pacientes);
 	}
 	
 	@GetMapping("{id}")
@@ -57,8 +52,7 @@ public class PacienteControle {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
 	public ResponseEntity<Paciente>buscarPorId(@PathVariable Long id){
-		var buscar = pacienteServico.buscarPorId(id);
-		return new ResponseEntity<>(buscar, HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(pacienteServico.buscarPorId(id));
 	}
 	
 	@PutMapping("{id}")
@@ -66,9 +60,8 @@ public class PacienteControle {
     @ApiResponse(responseCode = "200",description = " sucesso",content = {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
-	public ResponseEntity<Paciente>atualizarPaciente(@RequestBody @Valid PacienteDTO pacieDto, @PathVariable Long id){
-		var atualizar = pacienteServico.atualizarPaciente(pacieDto, id);
-		return new ResponseEntity<>(atualizar,HttpStatus.OK);
+	public ResponseEntity<Paciente>atualizarPaciente(@PathVariable Long id, @RequestBody Paciente paciente){
+	return ResponseEntity.status(HttpStatus.OK).body(pacienteServico.atualizarPaciente(id,paciente));
 		
 	}
 	
@@ -77,9 +70,8 @@ public class PacienteControle {
     @ApiResponse(responseCode = "200",description = " sucesso",content = {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
-	public ResponseEntity<List<Paciente>>buscarPorNomer(@PathParam("nome")String nome){		
-		var buscaNome = pacienteServico.buscarPacienteNome(nome);
-		return new ResponseEntity<>(buscaNome,HttpStatus.OK);
+	public ResponseEntity<List<Paciente>>buscarPorNomer(@PathParam("nome")String nome){
+	return ResponseEntity.status(HttpStatus.OK).body(pacienteServico.buscarPacienteNome(nome));
 	}
 	
 	@DeleteMapping("{id}")

@@ -10,9 +10,9 @@ import io.swagger.v3.oas.annotations.info.Info;
 @SpringBootApplication
 @OpenAPIDefinition(
 		info = @Info(
-			title = "API - Sistema para Idosos .",
+			title = "API - Sistema Para Gerenciar pacientes .",
 			version = "1.0",
-			description = "Documentando uma API para um sistema que auxilia cuidadores a cuidar de idosos .",
+			description = "Documentando uma API para um sistema que auxilia usuários a cuidar de pessoas doentes .",
 			contact = @Contact(name = "Carlos Roberto", email = "crrsj1@gmail.com")
 		)
 	)

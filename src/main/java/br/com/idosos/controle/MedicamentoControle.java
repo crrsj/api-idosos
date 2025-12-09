@@ -2,16 +2,11 @@ package br.com.idosos.controle;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.idosos.modelo.Medicamento;
 import br.com.idosos.servico.MedicamentoServico;
@@ -24,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("api/medicamento")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class MedicamentoControle {
 	
 	private final MedicamentoServico medicamentoServico;
@@ -33,10 +29,8 @@ public class MedicamentoControle {
     @ApiResponse(responseCode = "201",description = " sucesso",content = {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
-	public ResponseEntity<Medicamento>cadastrarMedicameto(@RequestBody Medicamento medicamento,
-			@PathVariable("pacienteId") Long pacienteId){
-		var cadastrar = medicamentoServico.cadastrarMedicamento(medicamento, pacienteId);
-		return new ResponseEntity<>(cadastrar,HttpStatus.CREATED);
+	public ResponseEntity<Medicamento>cadastrarMedicameto(@PathVariable Long pacienteId,@RequestBody Medicamento medicamento){
+		return ResponseEntity.status(HttpStatus.CREATED).body(medicamentoServico.cadastrarMedicamento(pacienteId, medicamento));
 	}
 
 	@GetMapping
@@ -44,9 +38,9 @@ public class MedicamentoControle {
     @ApiResponse(responseCode = "200",description = " sucesso",content = {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
-	public ResponseEntity<List<Medicamento>>listarMedicamentos(){
-		var listar = medicamentoServico.listarMedicamentos();
-		return new ResponseEntity<>(listar,HttpStatus.OK);
+	public ResponseEntity<Page<Medicamento>>listarMedicamentos(Pageable pageable){
+		Page<Medicamento>medicamentos = medicamentoServico.listarMedicamentos(pageable);
+		return ResponseEntity.status(HttpStatus.OK).body(medicamentos);
 	}
 	
 	@GetMapping("{id}")
@@ -55,8 +49,7 @@ public class MedicamentoControle {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
 	public ResponseEntity<Medicamento>buscarPorId(@PathVariable Long id){
-		var buscar = medicamentoServico.buscarPorId(id);
-		return new ResponseEntity<>(buscar,HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(medicamentoServico.buscarPorId(id));
 	}
 	
 	@PutMapping("{id}")
@@ -64,9 +57,8 @@ public class MedicamentoControle {
     @ApiResponse(responseCode = "200",description = " sucesso",content = {
    	@Content(mediaType = "application.json",schema = @Schema(implementation = ResponseEntity.class))
     })           
-	public ResponseEntity<Medicamento>atualizarMeedicamento(@RequestBody Medicamento medicamento,@PathVariable Long id){
-		var med = medicamentoServico.atualizarMedicamento(medicamento, id);
-		return new ResponseEntity<>(med,HttpStatus.OK);
+	public ResponseEntity<Medicamento>atualizarMeedicamento(@PathVariable Long id,@RequestBody Medicamento medicamento){
+		return ResponseEntity.status(HttpStatus.OK).body(medicamentoServico.atualizarMedicamento(id, medicamento));
 	}
 	
 	@DeleteMapping("{id}")
@@ -76,6 +68,6 @@ public class MedicamentoControle {
     })           
 	public ResponseEntity<Void>excluir(@PathVariable Long id){
 		medicamentoServico.excluirMedicamento(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 }
